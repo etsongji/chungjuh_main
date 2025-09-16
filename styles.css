@@ -1,0 +1,306 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #1B4B8C 0%, #0A2B5C 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.school-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.logo-text h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #7f8c8d;
+    font-weight: 400;
+}
+
+.year-badge {
+    background: linear-gradient(45deg, #1B4B8C, #0A2B5C);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(27, 75, 140, 0.3);
+}
+
+.main {
+    padding: 40px 0;
+}
+
+.calendar-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.calendar-header {
+    background: linear-gradient(135deg, #1B4B8C 0%, #0A2B5C 100%);
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+.calendar-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.calendar-header i {
+    font-size: 1.8rem;
+}
+
+.calendar-container {
+    padding: 20px;
+    background: white;
+}
+
+.calendar-container iframe {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.departments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.department-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.department-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.department-header {
+    background: linear-gradient(135deg, #1B4B8C 0%, #0A2B5C 100%);
+    color: white;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.department-header i {
+    font-size: 2rem;
+    opacity: 0.9;
+}
+
+.department-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.task-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.department-content {
+    padding: 25px;
+}
+
+.task-list {
+    list-style: none;
+}
+
+.task-list li {
+    margin-bottom: 12px;
+}
+
+.task-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.task-link:hover {
+    background: linear-gradient(135deg, #1B4B8C 0%, #0A2B5C 100%);
+    color: white;
+    transform: translateX(5px);
+    border-left-color: #fff;
+    box-shadow: 0 5px 15px rgba(27, 75, 140, 0.3);
+}
+
+.task-link i {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.footer {
+    background: rgba(44, 62, 80, 0.95);
+    backdrop-filter: blur(10px);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+
+@media (max-width: 768px) {
+    .header .container {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .logo {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .school-logo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .logo-text h1 {
+        font-size: 1.6rem;
+    }
+    
+    .calendar-container iframe {
+        height: 400px;
+    }
+    
+    .calendar-header h2 {
+        font-size: 1.2rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .departments-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .department-header {
+        padding: 20px;
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .department-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .department-content {
+        padding: 20px;
+    }
+    
+    .task-link {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .main {
+        padding: 20px 0;
+    }
+    
+    .logo i {
+        font-size: 2rem;
+    }
+    
+    .logo h1 {
+        font-size: 1.4rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .year-badge {
+        padding: 8px 16px;
+        font-size: 1rem;
+    }
+}
