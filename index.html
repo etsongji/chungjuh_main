@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>충주고등학교 업무 시스템</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="school-logo.png" alt="충주고등학교 교표" class="school-logo">
+                <div class="logo-text">
+                    <h1>충주고등학교</h1>
+                    <span class="subtitle">업무 시스템</span>
+                </div>
+            </div>
+            <div class="year-badge">2025</div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- 학사일정 캘린더 섹션 -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h2><i class="fas fa-calendar-alt"></i> 충주고등학교 학사일정</h2>
+                </div>
+                <div class="calendar-container">
+                    <iframe src="https://calendar.google.com/calendar/embed?src=d6f9e02e8d247d64ea6a9133b08e664818a4d9c9dcfbc2248ba305e77e591646%40group.calendar.google.com&ctz=Asia%2FSeoul" 
+                            style="border: 0" 
+                            width="100%" 
+                            height="600" 
+                            frameborder="0" 
+                            scrolling="no">
+                    </iframe>
+                </div>
+            </div>
+            
+            <div class="departments-grid">
+                <!-- 교무기획부 -->
+                <div class="department-card">
+                    <div class="department-header">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h2>교무기획부</h2>
+                        <span class="task-count">13개 업무</span>
+                    </div>
+                    <div class="department-content">
+                        <ul class="task-list">
+                            <li><a href="https://docs.google.com/spreadsheets/d/1l8MCxV0y-Yb6ODUKw720cp1lIZ3NCruQvRGEvNg6ERQ/edit" target="_blank" class="task-link"><i class="fas fa-calendar-week"></i>주간업무계획</a></li>
+                            <li><a href="https://etsongji.github.io/document-validator-improved/" target="_blank" class="task-link"><i class="fas fa-file-alt"></i>공문서 초안 점검</a></li>
+                            <li><a href="https://docs.google.com/spreadsheets/u/0/d/1ipOuWwNkgJ-EHE1nKmLSu69bvIjGhULx3pUyT3z2CLA/edit" target="_blank" class="task-link"><i class="fas fa-chalkboard-teacher"></i>중간고사 연수일정</a></li>
+                            <li><a href="https://drive.google.com/file/d/1ybpCnBsY_UduYRI-KhZY76Z2oJffpF-l/view" target="_blank" class="task-link"><i class="fas fa-calendar-alt"></i>학사일정(2025.4.9)</a></li>
+                            <li><a href="https://drive.google.com/file/d/1BmYDE2rRPOac87px9Mi6utDtVmOwjNUE/view" target="_blank" class="task-link"><i class="fas fa-sitemap"></i>근무상황 결재라인</a></li>
+                            <li><a href="https://drive.google.com/file/d/1nVP1w-gmaBilb1v4BnsmIQCz1aemCmj2/view" target="_blank" class="task-link"><i class="fas fa-book"></i>학교생활기록부 기재요령</a></li>
+                            <li><a href="https://notebooklm.google.com/notebook/5bb40190-af6b-488a-b4c8-4e313f12dc6a" target="_blank" class="task-link"><i class="fas fa-question-circle"></i>인사 매뉴얼 Q&A</a></li>
+                            <li><a href="https://etsongji.github.io/maternity-leave-calculator/" target="_blank" class="task-link"><i class="fas fa-calculator"></i>출산휴가 계산기</a></li>
+                            <li><a href="https://etsongji.github.io/chungbuk-teacher-calculator-2025/" target="_blank" class="task-link"><i class="fas fa-calculator"></i>만기 계산기</a></li>
+                            <li><a href="https://docs.google.com/spreadsheets/u/1/d/1jAHmIUfBLIBHvkNKVU9cAcrWKLRAVMoUPDHH0MWDkvo/edit?usp=sharing" target="_blank" class="task-link"><i class="fas fa-edit"></i>생기부 수정사항(1학년)</a></li>
+                            <li><a href="https://docs.google.com/spreadsheets/d/1Syr6SriAPZctj_oHFsD0gMdakCUHpOZWFAVZxJAtciY/edit" target="_blank" class="task-link"><i class="fas fa-edit"></i>생기부 수정사항(3학년)</a></li>
+                            <li><a href="https://etsongji.github.io/weekly_board_cjh/schedule.html" target="_blank" class="task-link"><i class="fas fa-search"></i>주간 학교일정 조회</a></li>
+                            <li><a href="https://etsongji.github.io/weekly_board_cjh/" target="_blank" class="task-link"><i class="fas fa-tasks"></i>부서별 주간업무</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 교육연구부 -->
+                <div class="department-card">
+                    <div class="department-header">
+                        <i class="fas fa-microscope"></i>
+                        <h2>교육연구부</h2>
+                        <span class="task-count">1개 업무</span>
+                    </div>
+                    <div class="department-content">
+                        <ul class="task-list">
+                            <li><a href="https://docs.google.com/spreadsheets/d/1unEe3HYybxTSbOcMcWJjIz95KalBE7Hxd-HzpGHKHV0/edit" target="_blank" class="task-link"><i class="fas fa-comments"></i>진로 진학 상담 자료(학생작성용)</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 교육과정부 -->
+                <div class="department-card">
+                    <div class="department-header">
+                        <i class="fas fa-book-open"></i>
+                        <h2>교육과정부</h2>
+                        <span class="task-count">7개 업무</span>
+                    </div>
+                    <div class="department-content">
+                        <ul class="task-list">
+                            <li><a href="https://docs.google.com/spreadsheets/d/11fUWPWYvso1oJbBlHr-aM7kCsLE5AiMKHfQXCLy_li4/edit?usp=sharing" target="_blank" class="task-link"><i class="fas fa-clock"></i>수업량유연화</a></li>
+                            <li><a href="https://docs.google.com/spreadsheets/d/1KRrprIta-zX6wYgC_OiK_xYnZL8U4kdtxPPKmjToAlA/edit?gid=0#gid=0" target="_blank" class="task-link"><i class="fas fa-table"></i>2026 편성표</a></li>
+                            <li><a href="#" class="task-link"><i class="fas fa-external-link-alt"></i>선택과목 안내자료 모음(노션)</a></li>
+                            <li><a href="#" class="task-link"><i class="fas fa-star"></i>서포터즈 특기사항(자율)</a></li>
+                            <li><a href="#" class="task-link"><i class="fas fa-chart-bar"></i>시수배당표</a></li>
+                            <li><a href="https://padlet.com/chungjugo/1-ku8uzfc2fbu1j5yp" target="_blank" class="task-link"><i class="fas fa-folder"></i>진로 교육과정 설계 포트폴리오 1학년</a></li>
+                            <li><a href="https://padlet.com/chungjugo/2-a5rwuerqa21wtoqd" target="_blank" class="task-link"><i class="fas fa-folder"></i>진로 교육과정 설계 포트폴리오 2학년</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 자공고방과후부 -->
+                <div class="department-card">
+                    <div class="department-header">
+                        <i class="fas fa-users"></i>
+                        <h2>자공고방과후부</h2>
+                        <span class="task-count">3개 업무</span>
+                    </div>
+                    <div class="department-content">
+                        <ul class="task-list">
+                            <li><a href="https://docs.google.com/spreadsheets/d/19uj9Dw8L_LpMrlaWLBrEIHKDF_g4bqOggy4Hn5BejdQ/edit?gid=1344074532#gid=1344074532" target="_blank" class="task-link"><i class="fas fa-clock"></i>창체 이수시간 및 활동날짜</a></li>
+                            <li><a href="https://docs.google.com/spreadsheets/d/1ZEbNIsvyDXuTxFkaGx_ZHft4eh9YJuCCrO_eFcuFWQo/edit?usp=sharing" target="_blank" class="task-link"><i class="fas fa-users"></i>창체동아리 구성</a></li>
+                            <li><a href="https://docs.google.com/spreadsheets/d/1blBpOHcaUo7hm-pgCC305zOOuw09hDMMci6PC5edKMY/edit" target="_blank" class="task-link"><i class="fas fa-heart"></i>1학기 봉사활동 인정시간</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3학년부 -->
+                <div class="department-card">
+                    <div class="department-header">
+                        <i class="fas fa-user-graduate"></i>
+                        <h2>3학년부</h2>
+                        <span class="task-count">1개 업무</span>
+                    </div>
+                    <div class="department-content">
+                        <ul class="task-list">
+                            <li><a href="https://docs.google.com/spreadsheets/d/12m74Y0FSzN9h4a3SLYL91WNHb4TqVvC1OVGvdxurRFA/edit?usp=sharing" target="_blank" class="task-link"><i class="fas fa-clock"></i>3학년 7교시 수업계획</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 충주고등학교. All rights reserved. | Developed by songjieon</p>
+        </div>
+    </footer>
+
+    <script src="chungju-script.js"></script>
+</body>
+</html>
