@@ -235,7 +235,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 20px;
+    padding: 12px;
     position: sticky;
     top: 100px;
     height: fit-content;
@@ -243,31 +243,31 @@ body {
 
 .meal-type-menu {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 20px;
+    flex-direction: row;
+    gap: 4px;
+    margin-bottom: 12px;
 }
 
 .meal-type-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 15px;
+    gap: 4px;
+    padding: 5px 8px;
     background: rgba(255, 255, 255, 0.7);
     border: 2px solid rgba(27, 75, 140, 0.2);
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #1B4B8C;
-    font-size: 0.85rem;
+    font-size: 0.65rem;
     font-weight: 500;
-    width: 100%;
-    justify-content: flex-start;
+    flex: 1;
+    justify-content: center;
 }
 
 .meal-type-btn i {
-    font-size: 1.1rem;
-    width: 16px;
+    font-size: 0.9rem;
+    width: 14px;
     text-align: center;
 }
 
@@ -483,7 +483,7 @@ body {
 }
 
 .header-meal-content {
-    padding: 18px;
+    padding: 12px;
 }
 
 .meal-header-title {

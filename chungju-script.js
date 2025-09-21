@@ -1,245 +1,438 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // 애니메이션 효과를 위한 초기화
-    initializeAnimations();
-    
-    // 검색 기능 추가
-    addSearchFunctionality();
-    
-    // 카드 클릭 이벤트
-    addCardInteractions();
-    
-    // 업무 링크 클릭 추적
-    trackTaskClicks();
-});
+// 충주고등학교 급식정보 API 연동 스크립트
+class MealInfoAPI {
+    constructor() {
+        // 나이스 교육정보 개방포털 API 설정
+        this.baseURL = 'https://open.neis.go.kr/hub/mealServiceDietInfo';
+        this.apiKey = 'cc1b9c0a34804a628cc701f43a8398e1';
+        this.schoolCode = '8000078'; // 충주고등학교
+        this.officeCode = 'M10'; // 충청북도교육청
+        
+        this.currentDate = new Date();
+        
+        this.initializeMealSection();
+        this.loadMealInfo();
+    }
 
-function initializeAnimations() {
-    // 페이지 로드 시 카드들이 순차적으로 나타나는 애니메이션
-    const cards = document.querySelectorAll('.department-card');
-    
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
+    // 급식 섹션 HTML 생성
+    initializeMealSection() {
+        const mainContainer = document.querySelector('.main .container');
+        const calendarSection = document.querySelector('.calendar-section');
         
-        setTimeout(() => {
-            card.style.transition = 'all 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-}
+        const mealSection = document.createElement('div');
+        mealSection.className = 'meal-section';
+        mealSection.innerHTML = `
+            <div class="meal-header">
+                <h2><i class="fas fa-utensils"></i> 충주고등학교 급식</h2>
+                <div class="meal-date-controls">
+                    <button id="prevDay" class="meal-nav-btn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="mealDate" class="meal-date"></span>
+                    <button id="nextDay" class="meal-nav-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="meal-content">
+                <div id="mealInfo" class="meal-info">
+                    <div class="loading">급식 정보를 불러오는 중...</div>
+                </div>
+            </div>
+        `;
 
-function addSearchFunctionality() {
-    // 검색 바 추가
-    const header = document.querySelector('.header .container');
-    const searchContainer = document.createElement('div');
-    searchContainer.className = 'search-container';
-    searchContainer.innerHTML = `
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="업무 검색..." />
-            <i class="fas fa-search"></i>
-        </div>
-    `;
-    
-    // 로고와 연도 배지 사이에 검색 바 삽입
-    header.insertBefore(searchContainer, header.lastElementChild);
-    
-    // 검색 기능 구현
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        filterTasks(searchTerm);
-    });
-}
+        // 캘린더 섹션 다음에 급식 섹션 추가
+        calendarSection.insertAdjacentElement('afterend', mealSection);
+        
+        this.setupEventListeners();
+        this.addMealStyles();
+        this.updateDateDisplay();
+    }
 
-function filterTasks(searchTerm) {
-    const taskLinks = document.querySelectorAll('.task-link');
-    const departmentCards = document.querySelectorAll('.department-card');
-    
-    taskLinks.forEach(link => {
-        const taskText = link.textContent.toLowerCase();
-        const parentCard = link.closest('.department-card');
-        
-        if (taskText.includes(searchTerm) || searchTerm === '') {
-            link.style.display = 'flex';
-        } else {
-            link.style.display = 'none';
-        }
-    });
-    
-    // 부서 카드 표시/숨김 처리
-    departmentCards.forEach(card => {
-        const visibleTasks = card.querySelectorAll('.task-link[style*="flex"]');
-        const allTasks = card.querySelectorAll('.task-link');
-        
-        if (searchTerm === '' || visibleTasks.length > 0) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-        
-        // 검색 결과가 없는 경우 모든 카드 표시
-        if (searchTerm === '') {
-            allTasks.forEach(task => {
-                task.style.display = 'flex';
-            });
-        }
-    });
-}
+    // 이벤트 리스너 설정
+    setupEventListeners() {
+        const prevBtn = document.getElementById('prevDay');
+        const nextBtn = document.getElementById('nextDay');
 
-function addCardInteractions() {
-    const departmentCards = document.querySelectorAll('.department-card');
-    
-    departmentCards.forEach(card => {
-        // 카드 헤더 클릭 시 콘텐츠 토글
-        const header = card.querySelector('.department-header');
-        const content = card.querySelector('.department-content');
-        
-        header.style.cursor = 'pointer';
-        
-        header.addEventListener('click', function() {
-            const isExpanded = content.style.display !== 'none';
-            
-            if (isExpanded) {
-                content.style.display = 'none';
-                card.classList.add('collapsed');
-            } else {
-                content.style.display = 'block';
-                card.classList.remove('collapsed');
-            }
+        prevBtn.addEventListener('click', () => {
+            this.currentDate.setDate(this.currentDate.getDate() - 1);
+            this.updateDateDisplay();
+            this.loadMealInfo();
         });
-    });
-}
 
-function trackTaskClicks() {
-    const taskLinks = document.querySelectorAll('.task-link');
-    
-    taskLinks.forEach(link => {
-        // 실제 링크가 있는 경우 기본 동작 허용
-        if (link.getAttribute('href') !== '#') {
-            link.addEventListener('click', function(e) {
-                const taskName = this.textContent.trim();
-                
-                // 클릭 효과
-                this.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-                
-                // 새 탭에서 열리도록 설정
-                this.setAttribute('target', '_blank');
-                console.log(`${taskName} 링크로 이동`);
-            });
-        } else {
-            // 링크가 없는 경우 기존 동작
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const taskName = this.textContent.trim();
-                const departmentName = this.closest('.department-card').querySelector('h2').textContent;
-                
-                // 클릭 효과
-                this.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-                
-                console.log(`${departmentName} - ${taskName} 클릭됨`);
-                showNotification(`${taskName} 페이지 준비 중입니다.`);
-            });
+        nextBtn.addEventListener('click', () => {
+            this.currentDate.setDate(this.currentDate.getDate() + 1);
+            this.updateDateDisplay();
+            this.loadMealInfo();
+        });
+    }
+
+    // 날짜 표시 업데이트
+    updateDateDisplay() {
+        const mealDateElement = document.getElementById('mealDate');
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            weekday: 'long'
+        };
+        mealDateElement.textContent = this.currentDate.toLocaleDateString('ko-KR', options);
+    }
+
+    // 날짜를 YYYYMMDD 형식으로 변환
+    formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}${month}${day}`;
+    }
+
+    // 급식 정보 로드
+    async loadMealInfo() {
+        const mealInfoDiv = document.getElementById('mealInfo');
+        mealInfoDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> 급식 정보를 불러오는 중...</div>';
+
+        try {
+            const dateStr = this.formatDate(this.currentDate);
+            
+            const url = `${this.baseURL}?KEY=${this.apiKey}&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=${this.officeCode}&SD_SCHUL_CODE=${this.schoolCode}&MLSV_YMD=${dateStr}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            this.displayMealInfo(data);
+            
+        } catch (error) {
+            console.error('급식 정보 로드 오류:', error);
+            mealInfoDiv.innerHTML = `
+                <div class="error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>급식 정보를 불러오는데 실패했습니다.</p>
+                    <button onclick="mealAPI.loadMealInfo()" class="retry-btn">다시 시도</button>
+                </div>
+            `;
         }
-    });
-}
+    }
 
-function showNotification(message) {
-    // 알림 요소 생성
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 15px 25px;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // 애니메이션으로 나타내기
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // 3초 후 자동 제거
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
-}
-
-// CSS 스타일 추가
-const additionalStyles = `
-    .search-container {
-        flex: 1;
-        max-width: 400px;
-        margin: 0 20px;
-    }
-    
-    .search-box {
-        position: relative;
-        width: 100%;
-    }
-    
-    .search-box input {
-        width: 100%;
-        padding: 12px 20px 12px 45px;
-        border: 2px solid #e9ecef;
-        border-radius: 25px;
-        font-size: 1rem;
-        outline: none;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.9);
-    }
-    
-    .search-box input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
-        background: white;
-    }
-    
-    .search-box i {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6c757d;
-    }
-    
-    .department-card.collapsed {
-        opacity: 0.7;
-    }
-    
-    @media (max-width: 768px) {
-        .search-container {
-            margin: 10px 0;
-            max-width: 100%;
-        }
+    // 급식 정보 표시
+    displayMealInfo(data) {
+        const mealInfoDiv = document.getElementById('mealInfo');
         
-        .header .container {
-            flex-direction: column;
+        // API 응답 구조 확인
+        if (!data.mealServiceDietInfo) {
+            mealInfoDiv.innerHTML = `
+                <div class="no-meal">
+                    <i class="fas fa-calendar-times"></i>
+                    <p>해당 날짜에 급식 정보가 없습니다.</p>
+                    <small>주말이나 공휴일일 수 있습니다.</small>
+                </div>
+            `;
+            return;
         }
-    }
-`;
 
-// 스타일을 head에 추가
-const style = document.createElement('style');
-style.textContent = additionalStyles;
-document.head.appendChild(style);
+        const meals = data.mealServiceDietInfo[1].row;
+        
+        let mealHTML = '<div class="meals-container">';
+        
+        meals.forEach(meal => {
+            // 급식 종류 (조식, 중식, 석식)
+            const mealType = this.getMealTypeName(meal.MMEAL_SC_NM);
+            
+            // 메뉴 정보 (HTML 태그 제거 및 포맷팅)
+            const menuItems = meal.DDISH_NM
+                .replace(/<br\/>/g, '\n')
+                .replace(/<[^>]*>/g, '')
+                .split('\n')
+                .filter(item => item.trim());
+
+            // 칼로리 정보
+            const calories = meal.CAL_INFO || '정보 없음';
+            
+            // 영양 정보
+            const nutrition = meal.NTR_INFO 
+                ? meal.NTR_INFO.replace(/<br\/>/g, ' | ')
+                : '영양 정보 없음';
+
+            mealHTML += `
+                <div class="meal-card">
+                    <div class="meal-type">
+                        <i class="fas ${this.getMealIcon(meal.MMEAL_SC_NM)}"></i>
+                        <span>${mealType}</span>
+                    </div>
+                    <div class="meal-menu">
+                        ${menuItems.map(item => `<div class="menu-item">${item}</div>`).join('')}
+                    </div>
+                    <div class="meal-info-details">
+                        <div class="calories">
+                            <i class="fas fa-fire"></i>
+                            <span>칼로리: ${calories}</span>
+                        </div>
+                        <div class="nutrition">
+                            <i class="fas fa-leaf"></i>
+                            <span>영양정보: ${nutrition}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        mealHTML += '</div>';
+        mealInfoDiv.innerHTML = mealHTML;
+    }
+
+    // 급식 종류명 변환
+    getMealTypeName(code) {
+        const mealTypes = {
+            '1': '조식',
+            '2': '중식', 
+            '3': '석식'
+        };
+        return mealTypes[code] || '급식';
+    }
+
+    // 급식 아이콘 반환
+    getMealIcon(code) {
+        const icons = {
+            '1': 'fa-sun',      // 조식
+            '2': 'fa-utensils', // 중식
+            '3': 'fa-moon'      // 석식
+        };
+        return icons[code] || 'fa-utensils';
+    }
+
+    // 급식 섹션 스타일 추가
+    addMealStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .meal-section {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 8px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                margin-bottom: 40px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            .meal-header {
+                background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+                color: white;
+                padding: 25px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .meal-header h2 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                margin: 0;
+            }
+
+            .meal-header i {
+                font-size: 1.8rem;
+            }
+
+            .meal-date-controls {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .meal-nav-btn {
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                padding: 10px 12px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .meal-nav-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.05);
+            }
+
+            .meal-date {
+                background: rgba(255, 255, 255, 0.2);
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-weight: 500;
+                min-width: 200px;
+                text-align: center;
+            }
+
+            .meal-content {
+                padding: 25px;
+                background: white;
+            }
+
+            .meals-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+
+            .meal-card {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 20px;
+                border-left: 5px solid #e74c3c;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+            }
+
+            .meal-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            .meal-type {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: #2c3e50;
+            }
+
+            .meal-type i {
+                color: #e74c3c;
+                font-size: 1.2rem;
+            }
+
+            .meal-menu {
+                margin-bottom: 15px;
+            }
+
+            .menu-item {
+                background: white;
+                padding: 8px 12px;
+                margin-bottom: 5px;
+                border-radius: 5px;
+                border-left: 3px solid #3498db;
+                font-size: 0.9rem;
+                transition: all 0.2s ease;
+            }
+
+            .menu-item:hover {
+                background: #f0f8ff;
+                transform: translateX(3px);
+            }
+
+            .meal-info-details {
+                border-top: 1px solid #dee2e6;
+                padding-top: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 0.85rem;
+                color: #6c757d;
+            }
+
+            .calories, .nutrition {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .calories i {
+                color: #f39c12;
+            }
+
+            .nutrition i {
+                color: #27ae60;
+            }
+
+            .loading, .error, .no-meal {
+                text-align: center;
+                padding: 40px 20px;
+                color: #6c757d;
+            }
+
+            .loading i, .error i, .no-meal i {
+                font-size: 2rem;
+                margin-bottom: 15px;
+                display: block;
+            }
+
+            .error {
+                color: #e74c3c;
+            }
+
+            .retry-btn {
+                background: #e74c3c;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 10px;
+                transition: all 0.3s ease;
+            }
+
+            .retry-btn:hover {
+                background: #c0392b;
+            }
+
+            .fa-spin {
+                animation: fa-spin 2s infinite linear;
+            }
+
+            @keyframes fa-spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(359deg); }
+            }
+
+            @media (max-width: 768px) {
+                .meal-header {
+                    flex-direction: column;
+                    text-align: center;
+                }
+
+                .meal-date-controls {
+                    order: 1;
+                }
+
+                .meal-header h2 {
+                    order: 2;
+                    font-size: 1.3rem;
+                }
+
+                .meal-date {
+                    font-size: 0.9rem;
+                    min-width: 150px;
+                }
+
+                .meals-container {
+                    grid-template-columns: 1fr;
+                    gap: 15px;
+                }
+
+                .meal-card {
+                    padding: 15px;
+                }
+            }
+        `;
+        
+        document.head.appendChild(style);
+    }
+}
+
+// DOMContentLoaded 이벤트에 급식 API 초기화 추가
+document.addEventListener('DOMContentLoaded', function() {
+    // 기존 초기화 함수들
+    initializeAnimations();
+    addSearchFunctionality();
+    addCardInteractions();
+    trackTaskClicks();
+    
+    // 급식 정보 API 초기화
+    window.mealAPI = new MealInfoAPI();
+});
